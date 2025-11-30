@@ -1,8 +1,7 @@
-package com.smatech.finance.config;
+package com.smatech.finance.jwt;
 
 import com.smatech.finance.dtos.auth.TokenValidationResponse;
 import com.smatech.finance.dtos.auth.UserResponse;
-import com.smatech.finance.feign.AIServiceClient;
 import com.smatech.finance.feign.AuthServiceClient;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,8 +23,8 @@ import java.util.stream.Collectors;
 
 /**
  * createdBy romeo
- * createdDate 29/11/2025
- * createdTime 15:50
+ * createdDate 30/11/2025
+ * createdTime 15:11
  * projectName Finance Platform
  **/
 
