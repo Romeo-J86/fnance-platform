@@ -1,0 +1,63 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:h2:mem:authdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  mail:
+    enabled: false  # Set to true in production
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:JESNaP90eVEnWwMsxoYTekZskI5Kkx3RSF4HKywIQXK}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+  issuer: finance-platform
+
+# Logging
+logging:
+  level:
+    com.smatech.finance.auth: DEBUG
+    org.springframework.security: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+app:
+  email:
+    from: noreply@smatechfinance.com
+    frontend-url: http://localhost:3000

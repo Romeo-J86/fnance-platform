@@ -1,0 +1,20 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: ai-service
+
+app:
+  ai:
+    gemini:
+      api-key: 'AIzaSyAjPti91EV6kVqd2wBDkIdf83SSfHoPlT0'
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    com.smatech.finance.ai: DEBUG
