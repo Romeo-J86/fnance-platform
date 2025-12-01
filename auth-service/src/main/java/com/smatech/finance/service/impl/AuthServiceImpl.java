@@ -124,36 +124,30 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse registerWithInvitation(RegisterWithInvitationRequest request) {
         log.info("Registration with invitation for: {}", request.email());
 
-        try {
-            // For invited users, they set their own password
-            User user = userService.registerWithInvitation(
-                    request.email(),
-                    request.password(),
-                    request.firstName(),
-                    request.lastName(),
-                    request.invitationToken()
-            );
+        // For invited users, they set their own password
+        User user = userService.registerWithInvitation(
+                request.email(),
+                request.password(),
+                request.firstName(),
+                request.lastName(),
+                request.invitationToken()
+        );
 
-            emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName(),
-                    "You set your own password during registration.");
+        emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName(),
+                "You set your own password during registration.");
 
-            String token = generateTokenWithUserDetails(user);
+        String token = generateTokenWithUserDetails(user);
 
-            log.info("User registered with invitation successfully: {}", request.email());
-            return new AuthResponse(
-                    token,
-                    "Registration with invitation successful",
-                    user.getEmail(),
-                    user.getRoles(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    false // user set their own password
-            );
-
-        } catch (Exception e) {
-            log.error("Invitation registration failed for email: {}", request.email(), e);
-            throw new RuntimeException("Invitation registration failed: " + e.getMessage());
-        }
+        log.info("User registered with invitation successfully: {}", request.email());
+        return new AuthResponse(
+                token,
+                "Registration with invitation successful",
+                user.getEmail(),
+                user.getRoles(),
+                user.getFirstName(),
+                user.getLastName(),
+                false // user set their own password
+        );
     }
 
 

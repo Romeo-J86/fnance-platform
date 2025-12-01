@@ -7,13 +7,14 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * createdBy romeo
  * createdDate 29/11/2025
- * createdTime 15:41
+ * createdTime 15:43
  * projectName Finance Platform
  **/
 
@@ -24,41 +25,40 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Digital Banking Core API")
+                        .title("Finance Service")
                         .version("1.0")
                         .description("""
-                            Core Banking Service API for account management, transactions, and financial operations.
+                            AI-Powered Financial Intelligence Service providing smart insights and automation.
                             
-                            **Key Features:**
-                            - Account creation and management
-                            - Fund transfers between accounts
-                            - Transaction history and filtering
-                            - Balance inquiries
-                            - Loan application processing
+                            **AI Capabilities:**
+                            - Transaction categorization using Gemini AI
+                            - Financial insights and spending analysis
+                            - Budget recommendations
+                            - Anomaly detection in spending patterns
+                            - Credit scoring analysis
                             
-                            **Security:** JWT Bearer Token required for all endpoints.
+                            **Integration:** This service is primarily used internally by other microservices.
                             """)
                         .contact(new Contact()
-                                .name("Banking Platform Team")
-                                .email("banking-support@smatech.com")
-                                .url("https://banking.smatech.com"))
+                                .name("AI & Analytics Team")
+                                .email("ai-team@smatech.com")
+                                .url("https://ai.smatech.com"))
                         .license(new License()
-                                .name("Commercial License")
-                                .url("https://smatech.com/license")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                                .name("AI Service License")
+                                .url("https://smatech.com/ai-license")))
+                .addSecurityItem(new SecurityRequirement().addList("serviceAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
-                                .name("bearerAuth")
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")
-                                .description("JWT token obtained from Auth Service")))
+                        .addSecuritySchemes("serviceAuth", new SecurityScheme()
+                                .name("X-Service-Auth")
+                                .type(SecurityScheme.Type.APIKEY)
+                                .in(SecurityScheme.In.HEADER)
+                                .description("Service-to-service authentication token")))
                 .addSecurityItem(new SecurityRequirement().addList("apiKey"))
                 .components(new Components()
                         .addSecuritySchemes("apiKey", new SecurityScheme()
                                 .name("X-API-Key")
                                 .type(SecurityScheme.Type.APIKEY)
                                 .in(SecurityScheme.In.HEADER)
-                                .description("API Key for internal service communication")));
+                                .description("API Key for internal microservices communication")));
     }
 }

@@ -1,8 +1,11 @@
 package com.smatech.finance.dtos.finance;
 
+import com.smatech.finance.enums.AlertSeverity;
+import com.smatech.finance.enums.Category;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * createdBy romeo
@@ -13,8 +16,12 @@ import java.math.BigDecimal;
 
 @Builder
 public record BudgetAlert(
-        String category,
+        String message,
+        Category category,
         BigDecimal budgetedAmount,
         BigDecimal actualSpent,
-        BigDecimal percentageUsed
+        BigDecimal percentageUsed,
+        AlertSeverity alertSeverity,
+        String recommendation,
+        LocalDateTime alertTime
 ) {}

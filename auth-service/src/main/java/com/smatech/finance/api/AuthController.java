@@ -10,6 +10,7 @@ import com.smatech.finance.service.EmailService;
 import com.smatech.finance.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,9 @@ public class AuthController {
     private final UserService userService;
     private final EmailService emailService;
     private final JwtUtil jwtUtil;
+
+    @Value("${spring.mail.username}")
+    private String email;
 
     @GetMapping("/validate-token")
     public ResponseEntity<TokenValidationResponse> validateToken(@RequestHeader("Authorization") String authHeader) {

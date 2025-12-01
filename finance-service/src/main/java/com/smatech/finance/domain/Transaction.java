@@ -1,5 +1,6 @@
 package com.smatech.finance.domain;
 
+import com.smatech.finance.enums.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -28,7 +29,8 @@ public class Transaction {
 
     private String merchant;
     private String description;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(nullable = false)
     private LocalDateTime transactionDate;

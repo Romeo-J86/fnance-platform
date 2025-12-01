@@ -2,7 +2,6 @@ package com.smatech.finance.config;
 
 import com.smatech.finance.dtos.auth.TokenValidationResponse;
 import com.smatech.finance.dtos.auth.UserResponse;
-import com.smatech.finance.feign.AIServiceClient;
 import com.smatech.finance.feign.AuthServiceClient;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,5 +1,6 @@
 package com.smatech.finance.feign;
 
+import com.smatech.finance.enums.Category;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,9 @@ public interface AIServiceClient {
 
     // DTO Records
     record CategorizeTransactionRequest(String description, String merchant) {}
-    record AICategoryResponse(String category) {}
-    record FinancialInsightsRequest(Double totalSpent, Double monthlyBudget, Map<String, Double> spendingByCategory) {}
+    record AICategoryResponse(Category category) {}
+    record FinancialInsightsRequest(Double totalSpent, Double monthlyBudget, Map<Category, Double> spendingByCategory) {}
     record FinancialInsightsResponse(String insights) {}
-    record BudgetRecommendationRequest(Map<String, Double> spendingPattern, Map<String, Double> currentBudgets, Double monthlyIncome) {}
+    record BudgetRecommendationRequest(Map<Category, Double> spendingPattern, Map<Category, Double> currentBudgets, Double monthlyIncome) {}
     record BudgetRecommendationResponse(String recommendations) {}
 }

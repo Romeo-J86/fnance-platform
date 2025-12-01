@@ -1,6 +1,7 @@
 package com.smatech.finance.persistence;
 
 import com.smatech.finance.domain.Budget;
+import com.smatech.finance.enums.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,8 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
 
     List<Budget> findByUserIdAndMonthAndYear(String userId, Integer month, Integer year);
 
-    Optional<Budget> findByUserIdAndCategoryAndMonthAndYear(String userId, String category, Integer month, Integer year);
+    Optional<Budget> findByCategory(Category category);
+
+    boolean existsByCategoryAndMonthAndYear(Category category, Integer month, Integer year);
+
 }

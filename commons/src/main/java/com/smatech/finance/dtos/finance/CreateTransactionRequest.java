@@ -1,5 +1,6 @@
 package com.smatech.finance.dtos.finance;
 
+import com.smatech.finance.enums.Category;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -17,6 +18,6 @@ public record CreateTransactionRequest(
         BigDecimal amount,
         String merchant,
         String description,
-        String category,
+        Category category,
         LocalDateTime transactionDate
 ) {}

@@ -4,6 +4,8 @@
       <w>appname</w>
       <w>authz</w>
       <w>connectiontimeout</w>
+      <w>globalcors</w>
+      <w>jerenyama</w>
       <w>smatech</w>
       <w>writetimeout</w>
     </words>

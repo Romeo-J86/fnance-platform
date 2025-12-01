@@ -1,20 +1,18 @@
 package com.smatech.finance.dtos.finance;
 
-import com.smatech.finance.enums.Category;
 import lombok.Builder;
 
 import java.math.BigDecimal;
 
 /**
  * createdBy romeo
- * createdDate 29/11/2025
- * createdTime 15:10
+ * createdDate 1/12/2025
+ * createdTime 14:14
  * projectName Finance Platform
  **/
 
 @Builder
-public record CreateBudgetRequest(
-        Category category,
+public record UpdateBudgetRequest(
         BigDecimal amount,
         Integer month,
         Integer year

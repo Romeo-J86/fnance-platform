@@ -1,8 +1,10 @@
 package com.smatech.finance.dtos.finance;
 
+import com.smatech.finance.enums.Category;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +17,31 @@ import java.util.Map;
 
 @Builder
 public record FinancialSummary(
+        // Core metrics
         BigDecimal totalSpent,
         BigDecimal monthlyBudget,
-        Map<String, BigDecimal>spendingByCategory,
-        List<BudgetAlert>budgetAlerts
-) {}
+        BigDecimal budgetRemaining,
+        BigDecimal budgetUtilization,
+
+        // Detailed breakdown
+        Map<Category, BigDecimal> spendingByCategory,
+
+        // Alerts
+        List<BudgetAlert> budgetAlerts,
+        Map<String, Long> alertSummary, // Count of alerts by severity
+
+        // Metadata
+        Integer month,
+        Integer year,
+        LocalDateTime generatedAt,
+        String currency
+) {
+    public FinancialSummary {
+        if (currency == null) {
+            currency = "USD";
+        }
+        if (generatedAt == null) {
+            generatedAt = LocalDateTime.now();
+        }
+    }
+}

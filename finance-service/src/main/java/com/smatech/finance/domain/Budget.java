@@ -1,5 +1,6 @@
 package com.smatech.finance.domain;
 
+import com.smatech.finance.enums.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -20,21 +21,22 @@ public class Budget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false)
+    @Column(name = "budget_month", nullable = false)
     private Integer month;
 
-    @Column(nullable = false)
+    @Column(name = "budget_year", nullable = false)
     private Integer year;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

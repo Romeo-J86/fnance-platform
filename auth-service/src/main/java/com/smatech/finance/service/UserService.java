@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
                                        String lastName, String invitationToken) {
         log.info("Processing invitation registration for email: {} with token: {}", email, invitationToken);
 
-        Invitation invitation = validateInvitation(invitationToken, email);
+
 
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("User already exists with email: " + email);
@@ -74,6 +74,9 @@ public class UserService implements UserDetailsService {
         user.setPassword(password);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+
+        Invitation invitation = validateInvitation(invitationToken, email);
+
         user.setRoles(List.of(invitation.getRole()));
 
         // Create the user

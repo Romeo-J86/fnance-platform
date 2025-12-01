@@ -1,6 +1,9 @@
 package com.smatech.finance.dtos.finance;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,13 +15,16 @@ import java.time.LocalDateTime;
  * projectName Finance Platform
  **/
 
+@Data
 @Builder
-public record BudgetDTO(
-        Long id,
-        String userId,
-        String category,
-        BigDecimal amount,
-        Integer month,
-        Integer year,
-        LocalDateTime createdAt
-) {}
+@NoArgsConstructor
+@AllArgsConstructor
+public class BudgetDTO {
+    private Long id;
+    private String userId;
+    private String category;
+    private BigDecimal amount;
+    private Integer month;
+    private Integer year;
+    private LocalDateTime createdAt;
+}

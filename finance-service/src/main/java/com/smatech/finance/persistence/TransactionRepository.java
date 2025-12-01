@@ -1,6 +1,7 @@
 package com.smatech.finance.persistence;
 
 import com.smatech.finance.domain.Transaction;
+import com.smatech.finance.enums.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByUserId(String userId);
 
-    List<Transaction> findByUserIdAndCategory(String userId, String category);
+    List<Transaction> findByUserIdAndCategory(String userId, Category category);
 
     List<Transaction> findByUserIdAndTransactionDateBetween(String userId, LocalDateTime start, LocalDateTime end);
 
@@ -34,7 +35,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "(:maxAmount IS NULL OR t.amount <= :maxAmount)")
     List<Transaction> findTransactionsWithFilters(
             @Param("userId") String userId,
-            @Param("category") String category,
+            @Param("category") Category category,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("minAmount") BigDecimal minAmount,
