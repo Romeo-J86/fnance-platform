@@ -26,15 +26,11 @@ public class GeminiService {
 
     private final RestTemplate restTemplate;
 
-    // Use the latest available models - Gemini 2.5 Flash is the best option
-    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
-
-    // Alternative models in case the primary fails
     private static final List<String> FALLBACK_MODELS = Arrays.asList(
-            "gemini-2.5-flash",      // Primary - latest and most capable
-            "gemini-2.0-flash-001",  // Stable version
-            "gemini-2.0-flash",      // Latest 2.0 flash
-            "gemini-1.5-flash-latest" // Fallback to 1.5 if needed
+            "gemini-2.5-flash",
+            "gemini-2.0-flash-001",
+            "gemini-2.0-flash",
+            "gemini-1.5-flash-latest"
     );
 
     private String currentModel = "gemini-2.5-flash";
@@ -101,13 +97,11 @@ public class GeminiService {
             return makeGeminiAPICall(currentModel, prompt);
         } catch (Exception e) {
             log.warn("Primary model {} failed, trying fallback models", currentModel);
-            // Try fallback models
             for (String model : FALLBACK_MODELS) {
-                if (model.equals(currentModel)) continue; // Skip the one we already tried
-
+                if (model.equals(currentModel)) continue;
                 try {
                     String result = makeGeminiAPICall(model, prompt);
-                    currentModel = model; // Switch to this working model
+                    currentModel = model;
                     log.info("Switched to working model: {}", model);
                     return result;
                 } catch (Exception ex) {
@@ -122,14 +116,11 @@ public class GeminiService {
     private String makeGeminiAPICall(String model, String prompt) {
         String url = "https://generativelanguage.googleapis.com/v1/models/" + model + ":generateContent?key=" + apiKey;
 
-        // Create request body
         Map<String, Object> requestBody = new HashMap<>();
 
-        // Contents array
         List<Map<String, Object>> contentsList = new ArrayList<>();
         Map<String, Object> content = new HashMap<>();
 
-        // Parts array
         List<Map<String, Object>> partsList = new ArrayList<>();
         Map<String, Object> textPart = new HashMap<>();
         textPart.put("text", prompt);
@@ -140,7 +131,6 @@ public class GeminiService {
 
         requestBody.put("contents", contentsList);
 
-        // Add generation config optimized for financial tasks
         Map<String, Object> generationConfig = new HashMap<>();
         generationConfig.put("temperature", 0.1); // Low temperature for consistent categorization
         generationConfig.put("topP", 0.8);
@@ -148,7 +138,6 @@ public class GeminiService {
         generationConfig.put("maxOutputTokens", 1024);
         requestBody.put("generationConfig", generationConfig);
 
-        // Set headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -157,8 +146,7 @@ public class GeminiService {
 
         log.debug("Calling Gemini API with model: {}", model);
 
-        // Make API call
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+        var response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
 
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             return extractTextFromResponse(response.getBody());
@@ -192,25 +180,30 @@ public class GeminiService {
     private String getMockFinancialInsights(Double totalSpent, Double monthlyBudget, String spendingByCategory) {
         double percentage = (totalSpent / monthlyBudget) * 100;
         return String.format(
-                "Financial Insights for Your Spending:\n\n" +
-                        "• You've spent $%.2f which is %.1f%% of your $%.2f budget\n" +
-                        "• Spending breakdown: %s\n" +
-                        "• Recommendations:\n" +
-                        "  1. Review your highest spending categories\n" +
-                        "  2. Consider setting category-specific limits\n" +
-                        "  3. Build an emergency fund if you haven't already",
+                """
+                        Financial Insights for Your Spending:
+                        
+                        • You've spent $%.2f which is %.1f%% of your $%.2f budget
+                        • Spending breakdown: %s
+                        • Recommendations:
+                          1. Review your highest spending categories
+                          2. Consider setting category-specific limits
+                          3. Build an emergency fund if you haven't already""",
                 totalSpent, percentage, monthlyBudget, spendingByCategory
         );
     }
 
     private String getMockBudgetRecommendations(Double monthlyIncome, String spendingPattern) {
         return String.format(
-                "Budget Recommendations:\n\n" +
-                        "Based on your $%.2f monthly income:\n" +
-                        "• Essentials (50%%): $%.2f for housing, utilities, groceries\n" +
-                        "• Discretionary (30%%): $%.2f for dining, entertainment, shopping\n" +
-                        "• Savings (20%%): $%.2f for emergency fund and investments\n\n" +
-                        "Your current pattern: %s - Consider aligning with these ratios.",
+                """
+                        Budget Recommendations:
+                        
+                        Based on your $%.2f monthly income:
+                        • Essentials (50%%): $%.2f for housing, utilities, groceries
+                        • Discretionary (30%%): $%.2f for dining, entertainment, shopping
+                        • Savings (20%%): $%.2f for emergency fund and investments
+                        
+                        Your current pattern: %s - Consider aligning with these ratios.""",
                 monthlyIncome, monthlyIncome * 0.5, monthlyIncome * 0.3, monthlyIncome * 0.2, spendingPattern
         );
     }

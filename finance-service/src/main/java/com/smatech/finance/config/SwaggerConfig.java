@@ -7,7 +7,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,40 +24,32 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Finance Service")
+                        .title("Finance Service API")
                         .version("1.0")
                         .description("""
-                            AI-Powered Financial Intelligence Service providing smart insights and automation.
+                            Core Financial Service responsible for managing financial records and operations.
                             
-                            **AI Capabilities:**
-                            - Transaction categorization using Gemini AI
-                            - Financial insights and spending analysis
-                            - Budget recommendations
-                            - Anomaly detection in spending patterns
-                            - Credit scoring analysis
+                            **Core Capabilities:**
+                            - **Budget Management:** Create, update, and monitor budgets.
+                            - **Transaction Management:** Record and retrieve financial transactions.
+                            - **Financial Summaries:** Aggregation of financial data and reporting.
                             
-                            **Integration:** This service is primarily used internally by other microservices.
+                            **Integration:** Serves as the central ledger for the Finance Platform.
                             """)
                         .contact(new Contact()
-                                .name("AI & Analytics Team")
-                                .email("ai-team@smatech.com")
-                                .url("https://ai.smatech.com"))
+                                .name("Finance Engineering Team")
+                                .email("finance-team@smatech.com")
+                                .url("https://finance.smatech.com"))
                         .license(new License()
-                                .name("AI Service License")
-                                .url("https://smatech.com/ai-license")))
-                .addSecurityItem(new SecurityRequirement().addList("serviceAuth"))
+                                .name("Proprietary License")
+                                .url("https://smatech.com/license")))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("serviceAuth", new SecurityScheme()
-                                .name("X-Service-Auth")
-                                .type(SecurityScheme.Type.APIKEY)
-                                .in(SecurityScheme.In.HEADER)
-                                .description("Service-to-service authentication token")))
-                .addSecurityItem(new SecurityRequirement().addList("apiKey"))
-                .components(new Components()
-                        .addSecuritySchemes("apiKey", new SecurityScheme()
-                                .name("X-API-Key")
-                                .type(SecurityScheme.Type.APIKEY)
-                                .in(SecurityScheme.In.HEADER)
-                                .description("API Key for internal microservices communication")));
+                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+                                .name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .description("Enter your JWT token")));
     }
 }

@@ -9,6 +9,7 @@ app:
   ai:
     gemini:
       api-key: 'AIzaSyAjPti91EV6kVqd2wBDkIdf83SSfHoPlT0'
+    url: 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent'
 
 eureka:
   client:
