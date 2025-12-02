@@ -30,7 +30,7 @@ The project is organized into the following modules:
 
 *   **Java SDK:** 17
 *   **Framework:** Spring Boot (v3.x implied)
-*   **Database:** JPA / Hibernate with H2 (for dev/test) or other SQL databases.
+*   **Database:** JPA / Hibernate with MySQL database.
 *   **Security:** Spring Security, JWT (JSON Web Tokens)
 *   **Architecture:** Spring Cloud (Gateway, Discovery)
 *   **Build Tool:** Maven
