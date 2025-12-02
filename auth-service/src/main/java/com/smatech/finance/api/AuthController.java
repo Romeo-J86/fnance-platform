@@ -8,6 +8,7 @@ import com.smatech.finance.jwt.JwtUtil;
 import com.smatech.finance.service.AuthService;
 import com.smatech.finance.service.EmailService;
 import com.smatech.finance.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -178,6 +179,20 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Request password reset", description = "Sends a password reset token to the user's email")
+    public ResponseEntity<MessageResponse> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+        return ResponseEntity.ok(new MessageResponse("If an account exists with that email, a reset link has been sent."));
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password", description = "Resets the user's password using a valid token")
+    public ResponseEntity<MessageResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(new MessageResponse("Password has been reset successfully."));
+    }
+
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getProfile() {
@@ -199,9 +214,10 @@ public class AuthController {
 
     @PostMapping("/change-password")
     @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Change password", description = "Changes the current user's password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         try {
-            userService.changePassword(authService.getCurrentUser().getEmail(), request.getNewPassword());
+            userService.changePassword(authService.getCurrentUser().getEmail(), request.newPassword());
             return ResponseEntity.ok(new MessageResponse("Password changed successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));

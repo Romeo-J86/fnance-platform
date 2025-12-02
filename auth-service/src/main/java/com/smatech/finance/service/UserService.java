@@ -226,13 +226,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User registerUser(String email, String password, String firstName, String lastName) {
+    public User registerUser(String email, String password, String firstName, String lastName, UserRole userRole) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setRoles(List.of(UserRole.USER));
+        user.setRoles(List.of(userRole));
 
         return createUser(user);
     }

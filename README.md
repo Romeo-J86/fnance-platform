@@ -1,5 +1,3 @@
-Based on the project structure and the code I've analyzed so far, here is a comprehensive README file for the Finance Platform.
-
 # Finance Platform
 
 A comprehensive microservices-based Finance Platform designed for managing users, financial transactions, and AI-driven insights. The system is built using modern Java technologies and follows a distributed architecture pattern.

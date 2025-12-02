@@ -37,6 +37,9 @@ public class User {
     @Column(name = "role")
     private List<UserRole> roles = new ArrayList<>();
 
+    private String resetPasswordToken;
+    private LocalDateTime resetPasswordTokenExpiry;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

@@ -5,22 +5,18 @@ spring:
   application:
     name: finance-service
   datasource:
-    url: jdbc:h2:mem:financedb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: ""
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: ${DB_URL_FINANCE}
+    username: ${DB_USERNAME}
+    password: ${DB_USERNAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 # Eureka Service Discovery
 eureka:

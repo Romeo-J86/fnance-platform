@@ -1,18 +1,17 @@
 package com.smatech.finance.dtos.auth;
 
 import lombok.Builder;
-import lombok.Data;
 
 /**
  * createdBy romeo
- * createdDate 29/11/2025
- * createdTime 11:44
+ * createdDate 2/12/2025
+ * createdTime 10:00
  * projectName Finance Platform
  **/
 
 @Builder
-public record ChangePasswordRequest(
-        String oldPassword,
+public record ResetPasswordRequest(
+        String token,
         String newPassword,
         String confirmPassword
 ) {}

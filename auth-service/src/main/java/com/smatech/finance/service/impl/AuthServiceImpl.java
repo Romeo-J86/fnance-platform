@@ -5,6 +5,7 @@ import com.smatech.finance.domain.User;
 import com.smatech.finance.dtos.auth.*;
 import com.smatech.finance.dtos.auth.enums.UserRole;
 import com.smatech.finance.jwt.JwtUtil;
+import com.smatech.finance.persistence.UserRepository;
 import com.smatech.finance.service.AuthService;
 import com.smatech.finance.service.EmailService;
 import com.smatech.finance.service.UserService;
@@ -16,13 +17,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -38,10 +42,12 @@ import java.util.stream.Collectors;
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
     private final PasswordGeneratorService passwordGeneratorService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -56,7 +62,8 @@ public class AuthServiceImpl implements AuthService {
                     request.email(),
                     temporaryPassword,
                     request.firstName(),
-                    request.lastName()
+                    request.lastName(),
+                    request.role()
             );
 
             emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName(), temporaryPassword);
@@ -257,6 +264,40 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
+    public void forgotPassword(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + request.email()));
+
+        String token = UUID.randomUUID().toString();
+        user.setResetPasswordToken(token);
+        user.setResetPasswordTokenExpiry(LocalDateTime.now().plusMinutes(15)); // Token valid for 15 mins
+
+        userRepository.save(user);
+        emailService.sendPasswordResetEmail(user.getEmail(),user.getFirstName(), token);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        User user = userRepository.findByResetPasswordToken(request.token())
+                .orElseThrow(() -> new RuntimeException("Invalid reset token"));
+
+        if (user.getResetPasswordTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Reset token has expired");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        user.setResetPasswordToken(null);
+        user.setResetPasswordTokenExpiry(null);
+
+        userRepository.save(user);
+    }
+    @Override
     public boolean hasRole(UserRole role) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -296,16 +337,22 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
-    public void changeCurrentUserPassword(String newPassword) {
-        try {
-            User currentUser = getCurrentUser();
-            userService.changePassword(currentUser.getEmail(), newPassword);
-            log.info("Password changed successfully for user: {}", currentUser.getEmail());
-        } catch (Exception e) {
-            log.error("Error changing current user password", e);
-            throw new RuntimeException("Failed to change password: " + e.getMessage());
+    public void changeCurrentUserPassword(ChangePasswordRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.encode(request.oldPassword()).equals(passwordEncoder.encode(user.getPassword()))) {
+            throw new RuntimeException("Old password does not match");
         }
+
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
     }
 
     @Override

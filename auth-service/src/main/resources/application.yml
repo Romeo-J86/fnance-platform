@@ -5,22 +5,18 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:h2:mem:authdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: ${DB_URL_AUTH}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
   mail:
     enabled: true  # Set to true in production
@@ -40,8 +36,8 @@ spring:
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:JESNaP90eVEnWwMsxoYTekZskI5Kkx3RSF4HKywIQXK}
-  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
   issuer: finance-platform
 
 # Logging
@@ -58,6 +54,9 @@ eureka:
     prefer-ip-address: true
 
 app:
-  email:
-    from: noreply@smatechfinance.com
-    frontend-url: http://localhost:3000
+  system-admin:
+    email: admin@finance.com
+    password: admin123
+  test-user:
+    email: user@finance.com
+    password: user123

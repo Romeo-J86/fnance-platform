@@ -21,9 +21,11 @@ public interface AuthService  {
     User getCurrentUser();
     InvitationValidationResponse validateInvitation(String invitationToken);
     void resendOrCreateInvitation(String email, UserRole role, String invitedBy);
+   void forgotPassword(ForgotPasswordRequest request);
+    void resetPassword(ResetPasswordRequest request);
     List<UserRole> getCurrentUserRoles();
     boolean validateCurrentUserPassword(String password);
-    void changeCurrentUserPassword(String newPassword);
+    void changeCurrentUserPassword(ChangePasswordRequest changePasswordRequest);
     AuthResponse refreshToken(String currentToken);
     boolean hasRole(UserRole role);
 }
