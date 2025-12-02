@@ -120,6 +120,10 @@ The `auth-service` exposes several key endpoints for user management. Below are 
 *   **Code Style:** The project uses Lombok to reduce boilerplate code. Ensure your IDE supports Lombok annotation processing.
 *   **Database:** By default, services may run with an in-memory H2 database for development. Check `application.properties` or `application.yml` in individual services for configuration.
 
+## Initial Data Seeded
+* One system admin with username: admin@finance.com, password: admin123
+* One test user with username: user@admin.com, password: user123
+
 ## Contact
 
 Created by Romeo Jerenyama.
