@@ -35,18 +35,15 @@ public class PasswordGeneratorService {
 
         List<Character> passwordChars = new ArrayList<>();
 
-        // Ensure at least one of each required character type
         passwordChars.add(getRandomChar(UPPERCASE));
         passwordChars.add(getRandomChar(LOWERCASE));
         passwordChars.add(getRandomChar(NUMBERS));
         passwordChars.add(getRandomChar(SPECIAL_CHARS));
 
-        // Fill the rest with random characters from all sets
         for (int i = passwordChars.size(); i < length; i++) {
             passwordChars.add(getRandomChar(ALL_CHARS));
         }
 
-        // Shuffle the characters to randomize positions
         for (int i = passwordChars.size() - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);
             Character temp = passwordChars.get(i);
@@ -54,7 +51,6 @@ public class PasswordGeneratorService {
             passwordChars.set(j, temp);
         }
 
-        // Convert to String
         StringBuilder password = new StringBuilder();
         for (Character c : passwordChars) {
             password.append(c);
@@ -67,7 +63,6 @@ public class PasswordGeneratorService {
         return characterSet.charAt(random.nextInt(characterSet.length()));
     }
 
-    // Generate memorable but strong password
     public String generateMemorablePassword() {
         String[] words = {"Secure", "Finance", "Tech", "Bank", "Money", "Safe", "Wealth", "Growth", "Smart", "Future"};
         String[] separators = {"!", "@", "#", "$", "&", "*"};
@@ -80,7 +75,6 @@ public class PasswordGeneratorService {
         return word1 + separator + word2 + number;
     }
 
-    // Validate password strength
     public boolean isPasswordStrong(String password) {
         if (password == null || password.length() < 10) {
             return false;

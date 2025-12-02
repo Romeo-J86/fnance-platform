@@ -23,11 +23,11 @@ spring:
       path: /h2-console
 
   mail:
-    enabled: false  # Set to true in production
+    enabled: true  # Set to true in production
     host: smtp.gmail.com
     port: 587
-    username: ${SMTP_USERNAME:romeojerenyama@gmail.com}
-    password: ${SMTP_PASSWORD:fvfy cekf cvvr zlgx}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
     properties:
       mail:
         smtp:

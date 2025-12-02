@@ -52,7 +52,6 @@ public class AuthServiceImpl implements AuthService {
             String temporaryPassword = passwordGeneratorService.generateStrongPassword();
             log.info("Generated temporary password for user: {}", request.email());
 
-            // Create user with auto-generated password
             User user = userService.registerUser(
                     request.email(),
                     temporaryPassword,
@@ -62,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
 
             emailService.sendWelcomeEmail(user.getEmail(), user.getFirstName(), temporaryPassword);
 
-            // Generate JWT token
             String token = generateTokenWithUserDetails(user);
 
             log.info("User registered successfully: {}", request.email());

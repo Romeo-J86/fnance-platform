@@ -50,20 +50,6 @@ public class JwtUtil {
         return generateToken(email, claims);
     }
 
-//    @SuppressWarnings("unchecked")
-//    public Collection<GrantedAuthority> extractAuthorities(String token) {
-//        Claims claims = extractAllClaims(token);
-//        Collection<String> roles = claims.get("roles", List.class);
-//
-//        if (roles == null) {
-//            return List.of();
-//        }
-//
-//        return roles.stream()
-//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-//                .toList();
-//    }
-
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }

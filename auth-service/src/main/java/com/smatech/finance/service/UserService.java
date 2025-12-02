@@ -79,10 +79,8 @@ public class UserService implements UserDetailsService {
 
         user.setRoles(List.of(invitation.getRole()));
 
-        // Create the user
         User savedUser = createUser(user);
 
-        // Mark invitation as used
         markInvitationAsUsed(invitation);
 
         log.info("User successfully registered with invitation. Email: {}, Role: {}",
@@ -93,16 +91,15 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Invitation validateInvitation(String invitationToken, String email) {
-        // Find the invitation by token
+
         Invitation invitation = invitationRepository.findByToken(invitationToken)
                 .orElseThrow(() -> new RuntimeException("Invalid invitation token"));
 
-        // Check if invitation is still valid
+
         if (!invitation.isValid()) {
             throw new RuntimeException("Invitation has expired or has already been used");
         }
 
-        // Verify email matches the invitation
         if (!invitation.getEmail().equalsIgnoreCase(email)) {
             throw new RuntimeException("Invitation email does not match provided email");
         }
@@ -120,22 +117,20 @@ public class UserService implements UserDetailsService {
                 invitation.getToken(), invitation.getEmail());
     }
 
-    // Invitation management methods
+
     @Transactional
     public Invitation createInvitation(String email, UserRole role, String invitedBy) {
         log.info("Creating invitation for email: {} with role: {} by: {}", email, role, invitedBy);
 
-        // Check if user already exists
+
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("User already exists with email: " + email);
         }
 
-        // Check for existing valid invitation
         if (invitationRepository.existsByEmailAndUsedFalse(email)) {
             throw new RuntimeException("Active invitation already exists for: " + email);
         }
 
-        // Create new invitation
         Invitation invitation = new Invitation();
         invitation.setEmail(email);
         invitation.setRole(role);
@@ -201,19 +196,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    // Enhanced user creation with invitation validation
     @Transactional
     public User createUserWithInvitation(User user, String invitationToken) {
-        // Validate invitation
         Invitation invitation = validateInvitation(invitationToken, user.getEmail());
 
-        // Set role from invitation
         user.setRoles(List.of(invitation.getRole()));
 
-        // Create user
         User savedUser = createUser(user);
 
-        // Mark invitation as used
         markInvitationAsUsed(invitation);
 
         return savedUser;

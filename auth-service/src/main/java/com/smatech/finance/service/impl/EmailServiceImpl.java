@@ -29,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${app.frontend.url:http://localhost:3000}")
     private String frontendUrl;
 
-    @Value("${spring.mail.enabled:false}")
+    @Value("${spring.mail.enabled:true}")
     private boolean emailEnabled;
 
     @Override

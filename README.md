@@ -55,7 +55,7 @@ git clone <repository-url>
 ```
 
 
-2.  **Build the project**
+2. **Build the project**
     You can build the entire project from the root directory:
 ```shell script
 mvn clean install
@@ -72,7 +72,7 @@ cd service-discovery
     mvn spring-boot:run
 ```
 
-2.  **Auth Service**
+2. **Auth Service**
 ```shell script
 cd auth-service
     mvn spring-boot:run
